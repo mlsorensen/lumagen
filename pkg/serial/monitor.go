@@ -56,13 +56,14 @@ func (q *LumagenSession) StartZQI22Monitor(callback func(command ZQI22Message)) 
 			for i := 0; i < num; i++ {
 				if buf[i] == '\r' {
 					// log string and error
-					cmd, err := parseZQI22(string(line))
+					msg := strings.TrimSpace(string(line))
+					line = []byte{}
+					cmd, err := parseZQI22(msg)
 					if err != nil {
-						fmt.Printf("Error parsing line '%s' due to '%v', ignoring\n",string(line), err)
+						fmt.Printf("Error parsing line '%s' due to '%v', ignoring\n", msg, err)
 						continue
 					}
 					callback(cmd)
-					line = []byte{}
 				} else {
 					line = append(line, buf[i])
 				}
