@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	MessageStartToken = "!"
 	MessagePrefixI22 = "!I22"
 	I22FieldCount = 20
 
@@ -23,7 +24,7 @@ type ZQI22Parser struct {
 
 func (z22 ZQI22Parser) Parse(line string) error {
 	var msg message.ZQI22Message
-	line = strings.TrimSpace(line)
+	line = extractRightByDelimiter(strings.TrimSpace(line), MessageStartToken)
 	if !strings.HasPrefix(line, MessagePrefixI22) {
 		return fmt.Errorf("message '%s' is not recognized as type %s", line, MessagePrefixI22)
 	}
@@ -60,4 +61,15 @@ func (z22 ZQI22Parser) Parse(line string) error {
 	}
 
 	return nil
+}
+
+// extractRightByDelimiter returns empty string if delimiter is not found, otherwise returns substring after
+// delimiter
+func extractRightByDelimiter(msg, delimiter string) string {
+	idx := strings.Index(msg, delimiter)
+	if idx < 0 {
+		return ""
+	}
+
+	return msg[idx:]
 }

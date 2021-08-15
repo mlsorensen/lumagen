@@ -21,6 +21,18 @@ var _ = Describe("Parsers", func() {
 			Expect(err).NotTo(HaveOccurred())
 		})
 
+		It("Should handle an I22 message mixed with arbitrary prefix", func() {
+			line := "wwww!I22,1,023,2160,0,0,178,235,-,0,000e,1,0,023,2160,235,2,1,p,P"
+			parser := ZQI22Parser{func(msg message.ZQI22Message) {
+				Expect(msg.HDR).To(BeTrue())
+				Expect(msg.SourceFrameRate).To(Equal(uint8(23)))
+				Expect(msg.SourceAspectRatio).To(Equal(uint8(235)))
+				Expect(msg.SourceVerticalResolution).To(Equal(uint16(2160)))
+			}}
+			err := parser.Parse(line)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
 		It("Should refuse to parse non-I22 messages", func() {
 			line := "POWERON."
 			parser := ZQI22Parser{nil}
