@@ -32,6 +32,7 @@ const (
 	AspectRatio235 = 235
 	AspectRatio240 = 240
 	AspectRatio220 = 220
+	AspectRatio200 = 200
 	AspectRatio178 = 178
 	AspectRatio185 = 185
 	AspectRatio143 = 143
